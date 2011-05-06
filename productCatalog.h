@@ -13,7 +13,10 @@ public:
     ~ProductCatalog();
 
     const QList<ProductType*> &FirstLevelTypes();
+    const QList<ProductType*> &SecondLevelTypes(QString);
+
     void EnterFirstLevelTypes(const QStringList &typeList);
+    void EnterSecondLevelTypes(const QString &firstType,const QStringList &typeList);
 
 private:
     QList<ProductType*> _firstLevelTypes;

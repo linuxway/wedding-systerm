@@ -29,3 +29,25 @@ void ProductCatalog::EnterFirstLevelTypes(const QStringList &typeList)
         _firstLevelTypes.append(type);
     }
 }
+
+const QList<ProductType*> &ProductCatalog::SecondLevelTypes(QString firstType)
+{
+    int i;
+    for(i = 0; i < _firstLevelTypes.size(); ++i){
+        if(_firstLevelTypes[i]->Name()==firstType)
+            break;
+    }
+    return _firstLevelTypes[i]->SecondLevelTypes();
+}
+
+void ProductCatalog::EnterSecondLevelTypes(const QString &firstType,const QStringList &typeList)
+{
+    for(int i = 0; i < _firstLevelTypes.size(); ++i){
+        if(_firstLevelTypes[i]->Name()==firstType){
+            foreach(QString typeName, typeList) {
+                ProductType *type = new ProductType(typeName);
+                (_firstLevelTypes[i]->SecondLevelTypes()).append(type);
+            }
+        }
+    }
+}

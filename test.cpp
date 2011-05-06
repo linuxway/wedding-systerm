@@ -1,5 +1,4 @@
 #include <QtTest/QtTest>
-#include <QTextCodec>
 
 #include"systemManager.h"
 #include"productType.h"
@@ -24,6 +23,7 @@ private:
     SystemManager *_sys;
 };
 
+Q_DECLARE_METATYPE(QList<QStringList>);
 void TestWedding::initTestCase()
 {
     _sys = new SystemManager();
@@ -78,7 +78,7 @@ void TestWedding::EnterFirstLevelTypes()
 void TestWedding::EnterSecondLevelTypes_data()
 {
     QTest::addColumn<QStringList>("firstTypeList");
-    QTest::addColumn< QList<QStringList> >("secondTypeLL");
+    QTest::addColumn<QList<QStringList> >("secondTypeLL");
 
     QString firstType = tr("场地布置");
     QStringList secondTypeList;
@@ -102,24 +102,24 @@ void TestWedding::EnterSecondLevelTypes_data()
     secondTypeList3 << tr("新娘鲜花系列")
                     << tr("婚车用花");
 
-    QStringList firstTypeList = QStringList() << firstType
-                                          << firstType1
-                                          << firstType2
-                                          << firstType3;
+    QStringList t_firstTypeList = QStringList() << firstType
+                                              << firstType1
+                                              << firstType2
+                                              << firstType3;
 
-    QList<QStringList> secondTypeLL;
-    secondTypeLL << secondTypeList
-            << secondTypeList1
-            << secondTypeList2
-            << secondTypeList3;
+    QList<QStringList> t_secondTypeLL;
+    t_secondTypeLL << secondTypeList
+                   << secondTypeList1
+                   << secondTypeList2
+                   << secondTypeList3;
 
-    QTest::newRow("喜典通目录") << firstTypeList << secondTypeLL;
+    QTest::newRow("喜典通目录") << t_firstTypeList << t_secondTypeLL;
 }
 
 void TestWedding::EnterSecondLevelTypes()
 {
-    QFETCH(QStringList, firstTypeList);
-    QFETCH(QList<QStringList>, secondTypeLL);
+    QFETCH(QStringList ,firstTypeList);
+    QFETCH(QList<QStringList> ,secondTypeLL);
 
     _sys->MakeNewCatalog();
     _sys->EnterFirstLevelTypes(firstTypeList);

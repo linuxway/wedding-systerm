@@ -29,3 +29,8 @@ void SystemManager::EnterFirstLevelTypes(const QStringList typeList)
 {
     Catalog()->EnterFirstLevelTypes(typeList);
 }
+
+void SystemManager::EnterSecondLevelTypes(const QString firstType,const QStringList typeList)
+{
+    Catalog()->EnterSecondLevelTypes(firstType,typeList);
+}
