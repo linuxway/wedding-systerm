@@ -11,11 +11,11 @@ public:
     ~ProductType();
 
     QString Name();
-    QList<ProductType*> &SecondLevelTypes();
+    QList<ProductType*> &Children();
 
 private:
     QString _name;
-    QList<ProductType*> _secondLevelTypes;
+    QList<ProductType*> _children;
 };
 
 #endif // PRODUCTTYPE_H

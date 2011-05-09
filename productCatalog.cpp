@@ -3,7 +3,8 @@
 #include <QStringList>
 
 ProductCatalog::ProductCatalog()
-    :_firstLevelTypes(QList<ProductType*>())
+    :_firstLevelTypes(QList<ProductType*>()),
+     _nullProductType(QList<ProductType*>())
 {
 }
 
@@ -35,9 +36,10 @@ const QList<ProductType*> &ProductCatalog::SecondLevelTypes(QString firstType)
     int i;
     for(i = 0; i < _firstLevelTypes.size(); ++i){
         if(_firstLevelTypes[i]->Name()==firstType)
-            break;
+            return _firstLevelTypes[i]->Children();
     }
-    return _firstLevelTypes[i]->SecondLevelTypes();
+    return _nullProductType;
+
 }
 
 void ProductCatalog::EnterSecondLevelTypes(const QString &firstType,const QStringList &typeList)
@@ -46,7 +48,7 @@ void ProductCatalog::EnterSecondLevelTypes(const QString &firstType,const QStrin
         if(_firstLevelTypes[i]->Name()==firstType){
             foreach(QString typeName, typeList) {
                 ProductType *type = new ProductType(typeName);
-                (_firstLevelTypes[i]->SecondLevelTypes()).append(type);
+                (_firstLevelTypes[i]->Children()).append(type);
             }
         }
     }

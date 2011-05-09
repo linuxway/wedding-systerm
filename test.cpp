@@ -4,6 +4,7 @@
 #include"productType.h"
 #include"productCatalog.h"
 
+Q_DECLARE_METATYPE(QList<QStringList>);
 class TestWedding:public QObject
 {
 Q_OBJECT
@@ -23,7 +24,7 @@ private:
     SystemManager *_sys;
 };
 
-Q_DECLARE_METATYPE(QList<QStringList>);
+
 void TestWedding::initTestCase()
 {
     _sys = new SystemManager();

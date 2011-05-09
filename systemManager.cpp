@@ -1,6 +1,6 @@
 #include"systemManager.h"
 
-#include<stdio.h>
+//#include<stdio.h>
 
 #include"productCatalog.h"
 
@@ -25,12 +25,12 @@ ProductCatalog* SystemManager::Catalog()
     return _cataLog;
 }
 
-void SystemManager::EnterFirstLevelTypes(const QStringList typeList)
+void SystemManager::EnterFirstLevelTypes(const QStringList& typeList)
 {
     Catalog()->EnterFirstLevelTypes(typeList);
 }
 
-void SystemManager::EnterSecondLevelTypes(const QString firstType,const QStringList typeList)
+void SystemManager::EnterSecondLevelTypes(const QString& firstType,const QStringList& typeList)
 {
     Catalog()->EnterSecondLevelTypes(firstType,typeList);
 }

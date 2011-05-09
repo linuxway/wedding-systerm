@@ -1,7 +1,7 @@
 #include "productType.h"
 
 ProductType::ProductType(QString name)
-    :_name(name),_secondLevelTypes(QList<ProductType*>())
+    :_name(name),_children(QList<ProductType*>())
 {
 
 }
@@ -16,7 +16,7 @@ QString ProductType::Name()
     return _name;
 }
 
-QList<ProductType*> &ProductType::SecondLevelTypes()
+QList<ProductType*> &ProductType::Children()
 {
-    return _secondLevelTypes;
+    return _children;
 }

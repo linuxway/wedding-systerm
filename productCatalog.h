@@ -20,6 +20,7 @@ public:
 
 private:
     QList<ProductType*> _firstLevelTypes;
+    QList<ProductType*> _nullProductType;
 };
 
 #endif // PRODUCTCATALOG_H

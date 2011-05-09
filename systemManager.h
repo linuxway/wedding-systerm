@@ -14,8 +14,8 @@ public:
     void MakeNewCatalog();
     ProductCatalog* Catalog();
 
-    void EnterFirstLevelTypes(const QStringList);
-    void EnterSecondLevelTypes(QString,QStringList);
+    void EnterFirstLevelTypes(const QStringList&);
+    void EnterSecondLevelTypes(const QString&,const QStringList&);
 
 private:
     ProductCatalog* _cataLog;
