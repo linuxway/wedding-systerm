@@ -19,6 +19,8 @@ public:
     void EnterSecondLevelTypes(const QString &firstType,const QStringList &typeList);
 
 private:
+    void _AddTypes(const QStringList &, QList<ProductType *> &);
+
     QList<ProductType*> _firstLevelTypes;
     QList<ProductType*> _nullProductType;
 };

@@ -25,31 +25,33 @@ const QList<ProductType*> &ProductCatalog::FirstLevelTypes()
 
 void ProductCatalog::EnterFirstLevelTypes(const QStringList &typeList)
 {
-    foreach(QString typeName, typeList) {
-        ProductType *type = new ProductType(typeName);
-        _firstLevelTypes.append(type);
-    }
+    _AddTypes(typeList, _firstLevelTypes);
 }
 
 const QList<ProductType*> &ProductCatalog::SecondLevelTypes(QString firstType)
 {
     int i;
     for(i = 0; i < _firstLevelTypes.size(); ++i){
-        if(_firstLevelTypes[i]->Name()==firstType)
+        if(_firstLevelTypes[i]->Name() == firstType)
             return _firstLevelTypes[i]->Children();
     }
-    return _nullProductType;
 
+    return _nullProductType;
 }
 
 void ProductCatalog::EnterSecondLevelTypes(const QString &firstType,const QStringList &typeList)
 {
     for(int i = 0; i < _firstLevelTypes.size(); ++i){
-        if(_firstLevelTypes[i]->Name()==firstType){
-            foreach(QString typeName, typeList) {
-                ProductType *type = new ProductType(typeName);
-                (_firstLevelTypes[i]->Children()).append(type);
-            }
+        if(_firstLevelTypes[i]->Name() == firstType){
+            _AddTypes(typeList, _firstLevelTypes[i]->Children());
         }
+    }
+}
+
+void ProductCatalog::_AddTypes(const QStringList &types, QList<ProductType *> &list)
+{
+    foreach(QString typeName, types) {
+        ProductType *oneType = new ProductType(typeName);
+        list.append(oneType);
     }
 }
