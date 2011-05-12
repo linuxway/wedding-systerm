@@ -22,6 +22,8 @@ private slots:
 
     void EmptySecondLevelTypes();
 
+    void EnterProductDescriptionForType();
+
 private:
     SystemManager *_sys;
 };
@@ -186,6 +188,34 @@ void TestWedding::EmptySecondLevelTypes()
 
     secondTypes = catalog->SecondLevelTypes(firstType3);
     QVERIFY(secondTypes.size() == 0);
+}
+
+void TestWedding::EnterProductDescriptionForType()
+{
+    QString firstType = tr("场地布置");
+    QStringList firstTypeList = QStringList() << firstType;
+    _sys->MakeNewCatalog();
+    _sys->EnterFirstLevelTypes(firstTypeList);
+
+    QStringList secondTypeList;
+    secondTypeList << tr("鲜花拱门")
+                   << tr("背景帷幔")
+                   << tr("灯光音响")
+                   << tr("电子设备");
+    _sys->EnterSecondLevelTypes(firstType, secondTypeList);
+
+    ProductDescription *pd = new ProductDescription();
+    pd->SetPath("");
+    pd->SetText(tr(""));
+    pd->SetPrice();
+    _sys->EnterProductDescriptionForType(tr("鲜花拱门"));
+
+    ProductCatalog *catalog = _sys->Catalog();
+    QList<ProductDescription *> dList = catalog->DescriptionsFor(tr("鲜花拱门"));
+    QVERIFY(dList.size() == 1);
+    QCOMPARE(dList[0]->Path(), pd->Path());
+    QCOMPARE(dList[0]->Text(), pd->Text());
+    QCOMPARE(dList[0]->Price(), pd->Price());
 }
 
 QTEST_MAIN(TestWedding)
