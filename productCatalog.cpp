@@ -59,6 +59,13 @@ void ProductCatalog::_AddTypes(const QStringList &types, QList<ProductType *> &l
 
 ProductType* ProductCatalog::_FindType(const QString& childType)
 {
+    /*Find in 1st catalog*/
+    for(int i = 0; i < _firstLevelTypes.size(); ++i){
+        if(childType == _firstLevelTypes[i]->Name())
+            return _firstLevelTypes[i];
+    }
+
+    /*Find in child catalog*/
     for(int i = 0; i < _firstLevelTypes.size(); ++i){
         QList<ProductType*> children = _firstLevelTypes[i]->Children();
         for(int j = 0; j < children.size(); ++j){
