@@ -3,6 +3,7 @@
 #include"systemManager.h"
 #include"productType.h"
 #include"productCatalog.h"
+#include"productDescription.h"
 
 Q_DECLARE_METATYPE(QList<QStringList>);
 class TestWedding:public QObject
@@ -205,10 +206,11 @@ void TestWedding::EnterProductDescriptionForType()
     _sys->EnterSecondLevelTypes(firstType, secondTypeList);
 
     ProductDescription *pd = new ProductDescription();
-    pd->SetPath("");
-    pd->SetText(tr(""));
-    pd->SetPrice();
-    _sys->EnterProductDescriptionForType(tr("鲜花拱门"));
+    pd->SetPath("/home/source/");
+    pd->SetText(tr("这是红色玫瑰花"));
+    pd->SetPrice("5RMB");
+    pd->SetFormat(tr("图片"));
+    _sys->EnterProductDescriptionForType(tr("鲜花拱门"),pd);
 
     ProductCatalog *catalog = _sys->Catalog();
     QList<ProductDescription *> dList = catalog->DescriptionsFor(tr("鲜花拱门"));
@@ -216,6 +218,7 @@ void TestWedding::EnterProductDescriptionForType()
     QCOMPARE(dList[0]->Path(), pd->Path());
     QCOMPARE(dList[0]->Text(), pd->Text());
     QCOMPARE(dList[0]->Price(), pd->Price());
+    QCOMPARE(dList[0]->Format(), pd->Format());
 }
 
 QTEST_MAIN(TestWedding)

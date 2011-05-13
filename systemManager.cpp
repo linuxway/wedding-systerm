@@ -34,3 +34,8 @@ void SystemManager::EnterSecondLevelTypes(const QString& firstType,const QString
 {
     Catalog()->EnterSecondLevelTypes(firstType,typeList);
 }
+
+void SystemManager::EnterProductDescriptionForType(const QString& childType,ProductDescription *pd)
+{
+    Catalog()->EnterProductDescriptionForType(childType,pd);
+}

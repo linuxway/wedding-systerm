@@ -4,6 +4,7 @@
 #include <QStringList>
 
 class ProductCatalog;
+class ProductDescription;
 
 class SystemManager
 {
@@ -16,6 +17,7 @@ public:
 
     void EnterFirstLevelTypes(const QStringList&);
     void EnterSecondLevelTypes(const QString&,const QStringList&);
+    void EnterProductDescriptionForType(const QString&,ProductDescription *pd);
 
 private:
     ProductCatalog* _cataLog;

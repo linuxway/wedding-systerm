@@ -4,7 +4,8 @@
 
 ProductCatalog::ProductCatalog()
     :_firstLevelTypes(QList<ProductType*>()),
-     _nullProductType(QList<ProductType*>())
+     _nullProductType(QList<ProductType*>()),
+     _nullProductDescription(QList<ProductDescription*>())
 {
 }
 
@@ -55,3 +56,33 @@ void ProductCatalog::_AddTypes(const QStringList &types, QList<ProductType *> &l
         list.append(oneType);
     }
 }
+
+ProductType* ProductCatalog::_FindType(const QString& childType)
+{
+    for(int i = 0; i < _firstLevelTypes.size(); ++i){
+        QList<ProductType*> children = _firstLevelTypes[i]->Children();
+        for(int j = 0; j < children.size(); ++j){
+            if(childType == children[j]->Name())
+                return children[j];
+        }
+    }
+    return NULL;
+}
+
+void ProductCatalog::EnterProductDescriptionForType(const QString& childType,ProductDescription *pd)
+{
+    ProductType* pt = _FindType(childType);
+    if(pt)
+        pt->DescriptionsFor().append(pd);
+}
+
+QList<ProductDescription*> &ProductCatalog::DescriptionsFor(QString childType)
+{
+    ProductType* pt = _FindType(childType);
+    if(pt)
+        return pt->DescriptionsFor();
+    return _nullProductDescription;
+}
+
+
+

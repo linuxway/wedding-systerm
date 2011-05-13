@@ -10,7 +10,9 @@ TEMPLATE = app
 SOURCES += test.cpp \
     systemManager.cpp \
     productType.cpp \
-    productCatalog.cpp
+    productCatalog.cpp \
+    productDescription.cpp
 HEADERS += systemManager.h \
     productType.h \
-    productCatalog.h
+    productCatalog.h \
+    productDescription.h
