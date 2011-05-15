@@ -1,6 +1,10 @@
 #include "productDescription.h"
 
 ProductDescription::ProductDescription()
+    : _path(""),
+      _description(""),
+      _price(0.0),
+      _format(FORMAT_PICTURE)
 {
 }
 
@@ -19,12 +23,12 @@ void ProductDescription::SetText(const QString &description)
     _description = description;
 }
 
-void ProductDescription::SetPrice(const QString &price)
+void ProductDescription::SetPrice(double price)
 {
     _price = price;
 }
 
-void ProductDescription::SetFormat(const QString &format)
+void ProductDescription::SetFormat(FORMAT format)
 {
     _format = format;
 }
@@ -39,12 +43,12 @@ const QString &ProductDescription::Text()
     return _description;
 }
 
-const QString &ProductDescription::Price()
+double ProductDescription::Price()
 {
     return _price;
 }
 
-const QString &ProductDescription::Format()
+int ProductDescription::Format()
 {
     return _format;
 }

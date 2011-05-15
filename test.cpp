@@ -25,14 +25,23 @@ private slots:
 
     void EnterProductDescriptionForType();
 
+    void FinishEnterCatalog();
+
 private:
+    void _CompareSecondLevel(ProductCatalog *,
+                             const QStringList &,
+                             const QList<QStringList> &);
+    void _CompareFirstLevel(const QList<ProductType *> &, const QStringList &);
+    void _CompareDescription(ProductDescription *, ProductDescription *);
+
     SystemManager *_sys;
 };
 
 
 void TestWedding::initTestCase()
 {
-    _sys = new SystemManager();
+    DBFacade *db = new MockDBFacade();
+    _sys = new SystemManager(db);
 }
 
 void TestWedding::cleanupTestCase()
@@ -73,12 +82,7 @@ void TestWedding::EnterFirstLevelTypes()
     _sys->MakeNewCatalog();
     _sys->EnterFirstLevelTypes(firstTypes);
     ProductCatalog *catalog = _sys->Catalog();
-    QList<ProductType *> list = catalog->FirstLevelTypes();
-    QCOMPARE(list.size(),firstTypes.size());
-
-    for(int i = 0; i < list.size(); ++i) {
-        QCOMPARE(list[i]->Name(), firstTypes[i]);
-    }
+    _CompareFirstLevel(catalog->FirstLevelTypes(), firstTypes);
 }
 
 void TestWedding::EnterSecondLevelTypes_data()
@@ -136,14 +140,7 @@ void TestWedding::EnterSecondLevelTypes()
     }
 
     ProductCatalog *catalog = _sys->Catalog();
-    for (int firstIndex = 0; firstIndex < firstTypeList.size(); ++firstIndex) {
-        QList<ProductType *> secondTypes = catalog->SecondLevelTypes(firstTypeList[firstIndex]);
-        QVERIFY(secondTypes.size() == secondTypeLL[firstIndex].size());
-
-        for (int secondIndex = 0; secondIndex < secondTypes.size(); ++secondIndex) {
-            QCOMPARE(secondTypes[secondIndex]->Name(), secondTypeLL[firstIndex][secondIndex]);
-        }
-    }
+    _CompareSecondLevel(catalog, firstTypeList, secondTypeLL);
 }
 
 void TestWedding::EmptySecondLevelTypes()
@@ -208,17 +205,152 @@ void TestWedding::EnterProductDescriptionForType()
     ProductDescription *pd = new ProductDescription();
     pd->SetPath("/home/source/");
     pd->SetText(tr("这是红色玫瑰花"));
-    pd->SetPrice("5RMB");
-    pd->SetFormat(tr("图片"));
+    pd->SetPrice(5);
+    pd->SetFormat(ProductDescription::FORMAT_PICTURE);
     _sys->EnterProductDescriptionForType(tr("鲜花拱门"),pd);
 
     ProductCatalog *catalog = _sys->Catalog();
     QList<ProductDescription *> dList = catalog->DescriptionsFor(tr("鲜花拱门"));
     QVERIFY(dList.size() == 1);
-    QCOMPARE(dList[0]->Path(), pd->Path());
-    QCOMPARE(dList[0]->Text(), pd->Text());
-    QCOMPARE(dList[0]->Price(), pd->Price());
-    QCOMPARE(dList[0]->Format(), pd->Format());
+    _CompareDescription(dList[0], pd);
+}
+
+void TestWedding::_CompareDescription(ProductDescription *description,
+                                      ProductDescription *golden)
+{
+    QCOMPARE(description->Path(), golden->Path());
+    QCOMPARE(description->Text(), golden->Text());
+    QCOMPARE(description->Price(), golden->Price());
+    QCOMPARE(description->Format(), golden->Format());
+}
+
+void TestWedding::FinishEnterCatalog()
+{
+    QString firstType = tr("场地布置");
+    QStringList secondTypeList;
+    secondTypeList << tr("鲜花拱门")
+                   << tr("背景帷幔")
+                   << tr("灯光音响")
+                   << tr("电子设备");
+
+    QString firstType1 = tr("专业主持");
+    QStringList secondTypeList1;
+    secondTypeList1 << tr("首席主持")
+                    << tr("金牌主持");
+
+    QString firstType2 = tr("婚车租赁");
+    QStringList secondTypeList2;
+    secondTypeList2 << tr("豪华头车")
+                    << tr("婚车车队");
+
+    QString firstType3 = tr("鲜花装饰");
+    QStringList secondTypeList3;
+    secondTypeList3 << tr("新娘鲜花系列")
+                    << tr("婚车用花");
+
+    QStringList firstTypeList = QStringList() << firstType
+                                              << firstType1
+                                              << firstType2
+                                              << firstType3;
+    QList<QStringList> secondTypeLL;
+    secondTypeLL << secondTypeList
+                 << secondTypeList1
+                 << secondTypeList2
+                 << secondTypeList3;
+
+    ProductDescription *rose = new ProductDescription();
+    rose->SetPath("/home/source/");
+    rose->SetText(tr("这是红色玫瑰花"));
+    rose->SetPrice(100);
+    rose->SetFormat(ProductDescription::FORMAT_PICTURE);
+
+    ProductDescription *lily = new ProductDescription();
+    lily->SetPath("/home/source/");
+    lily->SetText(tr("百合花"));
+    lily->SetPrice(100);
+    lily->SetFormat(ProductDescription::FORMAT_PICTURE);
+
+    ProductDescription *bmw = new ProductDescription();
+    bmw->SetPath("/home/source/");
+    bmw->SetText(tr("宝马750"));
+    bmw->SetPrice(1000);
+    bmw->SetFormat(ProductDescription::FORMAT_PICTURE);
+
+    ProductDescription *bubble = new ProductDescription();
+    bubble->SetPath("/home/source/");
+    bubble->SetText(tr("泡泡机"));
+    bubble->SetPrice(50);
+    bubble->SetFormat(ProductDescription::FORMAT_PICTURE);
+
+    ProductDescription *mrHan = new ProductDescription();
+    mrHan->SetPath("/home/source/");
+    mrHan->SetText(tr("韩乔生"));
+    mrHan->SetPrice(1000);
+    mrHan->SetFormat(ProductDescription::FORMAT_PICTURE);
+
+    _sys->MakeNewCatalog();
+    _sys->EnterFirstLevelTypes(firstTypeList);
+    _sys->EnterSecondLevelTypes(firstType1, secondTypeList1);
+    _sys->EnterSecondLevelTypes(firstType2, secondTypeList2);
+    _sys->EnterSecondLevelTypes(firstType3, secondTypeList3);
+    _sys->EnterProductDescriptionForType(tr("鲜花拱门"), rose);
+    _sys->EnterProductDescriptionForType(tr("婚车用花"), lily);
+    _sys->EnterProductDescriptionForType(tr("豪华头车"), bmw);
+    _sys->EnterProductDescriptionForType(tr("首席主持"), mrHan);
+    _sys->EnterProductDescriptionForType(tr("电子设备"), bubble);
+    _sys->FinishEnterCatalog();
+
+    DBFacade *db = _sys->DBFacade();
+    ProductCatalog *catalog = db->Catalog();
+
+    _CompareFirstLevel(catalog->FirstLevelTypes(), firstTypeList);
+    _CompareSecondLevel(catalog, firstTypeList, secondTypeLL);
+
+    QList<ProductDescription *> dList = catalog->DescriptionsFor(tr("鲜花拱门"));
+    QVERIFY(dList.size() == 1);
+    _CompareDescription(dList[0], rose);
+
+    dList = catalog->DescriptionsFor(tr("婚车用花"));
+    QVERIFY(dList.size() == 1);
+    _CompareDescription(dList[0], lily);
+
+    dList = catalog->DescriptionsFor(tr("豪华头车"));
+    QVERIFY(dList.size() == 1);
+    _CompareDescription(dList[0], bmw);
+
+    dList = catalog->DescriptionsFor(tr("首席主持"));
+    QVERIFY(dList.size() == 1);
+    _CompareDescription(dList[0], mrHan);
+
+    dList = catalog->DescriptionsFor(tr("电子设备"));
+    QVERIFY(dList.size() == 1);
+    _CompareDescription(dList[0], bubble);
+}
+
+void TestWedding::_CompareFirstLevel(const QList<ProductType *> &list,
+                                     const QStringList &golden)
+{
+    QCOMPARE(list.size(),golden.size());
+
+    for(int i = 0; i < list.size(); ++i) {
+        QCOMPARE(list[i]->Name(), golden[i]);
+    }
+}
+
+void TestWedding::_CompareSecondLevel(ProductCatalog *catalog,
+                                      const QStringList &firstLevel,
+                                      const QList<QStringList> &secondLevelGolden)
+{
+    for (int firstIndex = 0; firstIndex < firstLevel.size(); ++firstIndex) {
+        QList<ProductType *> secondTypes =
+                catalog->SecondLevelTypes(firstLevel[firstIndex]);
+        QVERIFY(secondTypes.size() == secondLevelGolden[firstIndex].size());
+
+        for (int secondIndex = 0; secondIndex < secondTypes.size(); ++secondIndex) {
+            QCOMPARE(secondTypes[secondIndex]->Name(),
+                     secondLevelGolden[firstIndex][secondIndex]);
+        }
+    }
 }
 
 QTEST_MAIN(TestWedding)

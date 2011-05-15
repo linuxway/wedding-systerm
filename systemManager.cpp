@@ -4,8 +4,9 @@
 
 #include"productCatalog.h"
 
-SystemManager::SystemManager()
-    :_cataLog(NULL)
+SystemManager::SystemManager(DBFacade *db)
+    : _cataLog(NULL),
+      _db(db)
 {
 
 }

@@ -6,24 +6,31 @@
 class ProductDescription
 {
 public:
+    enum FORMAT {
+        FORMAT_BEGIN = 0,
+        FORMAT_PICTURE = 0,
+        FORMAT_MOVIE = 1,
+        FORMAT_END = 1
+      };
+
     ProductDescription();
     ~ProductDescription();
 
     void SetPath(const QString&);
     void SetText(const QString&);
-    void SetPrice(const QString&);
-    void SetFormat(const QString&);
+    void SetPrice(double);
+    void SetFormat(FORMAT);
 
     const QString &Path();
     const QString &Text();
-    const QString &Price();
-    const QString &Format();
+    double Price();
+    int Format();
 
 private:
     QString _path;
-    QString _price;
     QString _description;
-    QString _format;
+    double _price;
+    FORMAT _format;
 };
 
 #endif // PRODUCTDESCRIPTION_H

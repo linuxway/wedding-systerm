@@ -5,11 +5,12 @@
 
 class ProductCatalog;
 class ProductDescription;
+class DBFacade;
 
 class SystemManager
 {
 public:
-    SystemManager();
+    SystemManager(DBFacade *);
     ~SystemManager();
 
     void MakeNewCatalog();
@@ -21,6 +22,6 @@ public:
 
 private:
     ProductCatalog* _cataLog;
-
+    DBFacade *_db;
 };
 #endif // SYSTEMMGR_H
